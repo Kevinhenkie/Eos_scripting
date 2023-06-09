@@ -1,0 +1,17 @@
+#!/bin/bash
+
+DIR="/home/kevin/U/Eos/shell_scripting/afbeeldingen"
+
+if [ -d "$DIR" ]; then
+	echo "afbeeldingen bestaat al"
+else
+	mkdir ./afbeeldingen
+	echo "Directory afbeeldingen wordt aangemaakt..."
+fi
+
+echo "Afbeeldingen kopieren"
+# Eerst alle afbeeldingen vinden in home directory, 
+# daarna die bestanden kopieren naar afbeeldingen map.
+find $1 -name '*.jpg' -exec cp -pr '{}' './afbeeldingen' ';'
+find $1 -name '*.png' -exec cp -pr '{}' './afbeeldingen' ';'
+echo "Kopieren voltooid..."

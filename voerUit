@@ -1,0 +1,39 @@
+#!/bin/bash
+
+
+file="$1"
+
+
+if [[ $file == *.py ]]
+then
+	extension=".py"
+elif [[ $file == *.sh ]]
+then
+	extension=".sh"
+elif [[ $file == *.cc ]]
+then
+	extension=".cc"
+else
+	echo "niet ondersteund bestands type"
+	exit 1
+fi
+	
+
+case "$extension" in
+	.py)
+		echo "Python bestand"
+		python3 "$file"
+		;;
+	.sh)
+		echo "Shell script"
+		/bin/bash "$file"
+		;;
+	.cc)
+		echo "C(++) bestand"
+		cat "$file"
+		;;
+	*)
+		exit 1
+		;;
+esac
+

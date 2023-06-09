@@ -1,0 +1,11 @@
+#!/bin/bash
+
+$1
+
+# Loop door alle jpg-bestanden in de map en verander ze naar png
+for file in "$1"/*.jpg; do
+  if [ -f "$file" ]; then
+    echo "Converteer: $file"
+    convert "$file" -resize 128x128 "${file%.jpg}.png"
+  fi
+done

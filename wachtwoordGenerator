@@ -1,0 +1,82 @@
+#!/bin/bash
+
+# Pas waardes aan naar jouw voorkeur
+# Het is aan te raden om ze allemaal op true te laten 
+# en de lengte hoger dan 8 te laten
+length=10       
+use_lowercase=true
+use_uppercase=true
+use_numbers=true
+use_special_chars=true
+#
+#Hieronder begint de code
+#
+
+
+# Functie om een willekeurig karakter te genereren
+function generate_random_char() {
+    local chars=$1
+    local length=${#chars}
+    local random_index=$((RANDOM % length))
+    echo -n "${chars:random_index:1}"
+}
+
+# Controleer de opgegeven opties
+# Het gedeelde wat lijkt op willekeurig gebrabbel (l:lu:nsc) zijn de opties de
+# je mee kan geven die je kan aanpassen bovenaan het script
+while getopts ":l:lu:nsc" opt;
+do
+    case $opt in
+        l)
+            length=$OPTARG
+            ;;
+        u)
+            use_uppercase=$OPTARG
+            ;;
+        n)
+            use_numbers=$OPTARG
+            ;;
+        s)
+            use_special_chars=$OPTARG
+            ;;
+        c)
+            use_lowercase=$OPTARG
+            ;;
+        \?)
+            echo "Ongeldige optie: -$OPTARG" >&2
+            exit 1
+            ;;
+    esac
+done
+
+# Stel de karakterreeksen in op basis van de opgegeven opties
+chars=""
+if $use_lowercase; 
+then
+    chars+="abcdefghijklmnopqrstuvwxyz"
+fi
+if $use_uppercase; 
+then
+    chars+="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+fi
+if $use_numbers; 
+then
+    chars+="0123456789"
+fi
+if $use_special_chars; 
+then
+    chars+="!@#$%^&*()_-+=~"
+fi
+
+
+# Genereer het wachtwoord
+password=""
+for (( i=0; i<length; i++ ));
+do
+    password+=$(generate_random_char "$chars")
+done
+
+echo "Als niemand je scherm kan zien kan je dit als wachtwoord gebruiken."
+echo "Wachtwoord: $password"
+echo "Je kan de opties voor het genereren van het wachtwoord aanpassen"
+echo "aan de bovenkant van dit script"

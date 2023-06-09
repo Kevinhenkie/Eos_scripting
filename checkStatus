@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Controleer de input
+if [ $# -ne 3 ]; 
+then
+  echo "Gebruik: checkStatus /pad/naar/bestanden command logfile"
+  exit 1
+fi
+
+map="$1"
+command="$2"
+logfile="$3"
+
+# Opnieuw aanmaken van logfile
+rm ./logfile
+touch logfile
+
+# Loop door elk bestand in de opgegeven map
+for bestand in "$map"/*; do
+  # Controleer of het een bestand is
+  if [ -f "$bestand" ]; then
+    # Voer de command uit op het bestand
+    # dev null zodat de output van alle bestanden gelijk weg gaat
+    $command "$bestand" >/dev/null 2>&1
+
+    # Controleer de return status
+    if [ $? -eq 0 ]; then
+      echo "Succes: $bestand" >> "$logfile"
+    else
+      echo "Mislukt: $bestand" >> "$logfile"
+    fi
+  fi
+done
+

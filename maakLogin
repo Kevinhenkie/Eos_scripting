@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Vraag naar de naam van de gebruiker
+read -p "Geef je naam (default: $(whoami)): " name
+name=${name:-$(whoami)}
+
+# Vraag naar het wachtwoord en bevestiging
+while true; 
+do
+    read -s -p "Kies een wachtwoord (minimaal 8 karakters): " password
+    echo
+    read -s -p "Bevestig het wachtwoord: " password_confirm
+    echo
+
+    # Controleer of het wachtwoord voldoet aan de eisen
+    if [[ ${#password} -ge 8 && $password == $password_confirm ]]; then
+        break
+    fi
+
+    echo "Het wachtwoord moet minimaal 8 karakters lang zijn en de ingevoerde wachtwoorden moeten overeenkomen."
+done
+
+# Genereer de MD5-hash van het wachtwoord
+password_hash=$(echo -n "$password" | md5sum | awk '{print $1}')
+
+# Schrijf de gebruikersnaam en de MD5-hash naar het tekstbestand
+echo -e "Gebruikersnaam: $name\nWachtwoord MD5-hash: $password_hash" > "$1"
+
+echo "Login succesvol aangemaakt in het bestand: $1"
